@@ -27,20 +27,48 @@ function ConvertHandler() {
     const afterLetters = /[a-zA-Z]+$/.exec(input);
     const pattern = /^\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?[a-zA-Z]+$/;
     const numbers = /^(.*?)(?=[a-zA-Z])/;
-
+    const noLetters = /^\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?$/.exec(input);
     if (input === "") {
 
       return 1;
 
-    } else if (letter !== null) {
+    }
+    if (letter !== null) {
 
       return 1;
 
-    } else if (afterLetters === null && input !== "" && letter === null) {
+    }
+
+    if (afterLetters === null && input !== "" && letter === null) {
 
       return "invalid number"
 
-    } else if (input[0] === ".") {
+    }
+
+
+    if (noLetters !== null && letter === null) {
+      const result = noLetters[0];
+
+      if (result.includes("/")) {
+        const parts = result.split("/");
+        const numerator = parseFloat(parts[0]);
+        const denominator = parseFloat(parts[1]);
+        const num = numerator / denominator;
+        return num;
+      } else {
+        const num = Number(result);
+        return num;
+      }
+
+    }
+
+    if (noLetters === null && letter === null) {
+      return "invalid number"
+    }
+
+
+
+    if (input[0] === ".") {
 
       const newInput = 0 + input;
 
