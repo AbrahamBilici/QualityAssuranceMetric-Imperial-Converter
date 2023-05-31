@@ -23,31 +23,65 @@ function ConvertHandler() {
 
 
   this.getNum = function (input) {
+
     const letter = /^[a-zA-Z]+$/.exec(input);
-    const afterLetters = /[a-zA-Z]+$/.exec(input);
+    const noLetters = /^\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?$/;
     const pattern = /^\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?[a-zA-Z]+$/;
     const numbers = /^(.*?)(?=[a-zA-Z])/;
-    const noLetters = /^\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?$/.exec(input);
+
+
     if (input === "") {
-
       return 1;
-
     }
+
+
     if (letter !== null) {
 
       return 1;
 
     }
 
-    if (afterLetters === null && input !== "" && letter === null) {
+    if (input[0] === ".") {
 
-      return "invalid number"
+      const newInput = 0 + input;
 
+
+      if (noLetters.test(newInput) === true) {
+        const result = noLetters.exec(newInput)[0];
+        if (result.includes("/")) {
+          const parts = result.split("/");
+          const numerator = parseFloat(parts[0]);
+          const denominator = parseFloat(parts[1]);
+          const num = numerator / denominator;
+          return num;
+        } else {
+          const num = Number(result);
+          return num;
+        }
+
+      }
+
+      if (pattern.test(newInput) === true) {
+        const result = numbers.exec(newInput)[0];
+        if (result.includes("/")) {
+          const parts = result.split("/");
+          const numerator = parseFloat(parts[0]);
+          const denominator = parseFloat(parts[1]);
+          const num = numerator / denominator;
+          return num;
+        } else {
+          const num = Number(result);
+          return num;
+        }
+
+      }
     }
 
 
-    if (noLetters !== null && letter === null) {
-      const result = noLetters[0];
+    const newInput = input;
+
+    if (noLetters.test(newInput) === true) {
+      const result = noLetters.exec(newInput)[0];
 
       if (result.includes("/")) {
         const parts = result.split("/");
@@ -62,58 +96,25 @@ function ConvertHandler() {
 
     }
 
-    if (noLetters === null && letter === null) {
-      return "invalid number"
+    if (pattern.test(newInput) === true) {
+      const result = numbers.exec(newInput)[0];
+      if (result.includes("/")) {
+        const parts = result.split("/");
+        const numerator = parseFloat(parts[0]);
+        const denominator = parseFloat(parts[1]);
+        const num = numerator / denominator;
+        return num;
+      } else {
+        const num = Number(result);
+        return num;
+      }
+
     }
 
+    return 'invalid number';
 
 
-    if (input[0] === ".") {
 
-      const newInput = 0 + input;
-
-      const chk = pattern.exec(newInput);
-      if (chk === null) {
-
-        return "invalid number"
-
-      } else {
-
-        const result = numbers.exec(newInput)[0];
-        if (result.includes("/")) {
-          const parts = result.split("/");
-          const numerator = parseFloat(parts[0]);
-          const denominator = parseFloat(parts[1]);
-          const num = numerator / denominator;
-          return num;
-        } else {
-          const num = Number(result);
-          return num;
-        }
-      }
-    } else {
-
-      const chk = pattern.exec(input);
-
-      if (chk === null) {
-
-        return "invalid number"
-
-      } else {
-
-        const result = numbers.exec(input)[0];
-        if (result.includes("/")) {
-          const parts = result.split("/");
-          const numerator = parseFloat(parts[0]);
-          const denominator = parseFloat(parts[1]);
-          const num = numerator / denominator;
-          return num;
-        } else {
-          const num = Number(result);
-          return num;
-        }
-      }
-    }
   };
 
 
@@ -124,21 +125,33 @@ function ConvertHandler() {
 
 
   this.getUnit = function (input) {
-    const pattern = /[a-zA-Z]+$/;
-    let result = pattern.exec(input)[0];
 
-    if (result.toLowerCase() === "l") {
-      return "L"
-    } else if (shortUnits.includes(result.toLowerCase())) {
-      return result.toLowerCase();
+    const pattern = /[a-zA-Z]+$/;
+    const chk = pattern.test(input);
+    const result = pattern.exec(input);
+
+    if (chk === true) {
+      if (result[0].toLowerCase() === "l") {
+        return "L"
+      } else if (shortUnits.includes(result[0].toLowerCase()) === true) {
+        return result[0].toLowerCase();
+      } else {
+
+        return "invalid unit";
+      }
+
+
     } else {
-      return "invalid unit";
+      return 'invalid unit';
     }
 
 
 
-
   };
+
+
+
+
 
   this.getReturnUnit = function (initUnit) {
     return returnUnits[initUnit];

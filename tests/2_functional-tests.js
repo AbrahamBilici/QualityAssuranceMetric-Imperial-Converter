@@ -41,7 +41,7 @@ suite('Functional Tests', function () {
             .get("/api/convert?input=3/7.2/4kg")
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.equal(res.text, "invalid number");
+                assert.equal(res.text, 'invalid number');
                 done();
             });
     });
@@ -52,7 +52,7 @@ suite('Functional Tests', function () {
             .get("/api/convert?input=3/7.2/4kilomegagram")
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.equal(res.text, "invalid number and unit");
+                assert.equal(res.text, 'invalid number and unit');
                 done();
             });
     });
